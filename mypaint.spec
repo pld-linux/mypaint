@@ -7,7 +7,6 @@ License:	GPL
 Group:		X11/Applications/Graphics
 Source0:	http://download.gna.org/mypaint/%{name}-%{version}.tar.bz2
 URL:		http://mypaint.intilinux.com/
-BuildRequires:	desktop-file-utils
 BuildRequires:	gettext-devel
 BuildRequires:	libpng-devel
 BuildRequires:	python-numpy-numarray-devel
@@ -15,6 +14,7 @@ BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(find_lang) >= 1.32
 BuildRequires:	scons
 BuildRequires:	swig-python
+Requires(post,postun):	desktop-file-utils
 Requires:	hicolor-icon-theme
 Requires:	libpng
 Requires:	python-numpy-numarray
