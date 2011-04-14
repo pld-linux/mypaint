@@ -16,7 +16,6 @@ BuildRequires:	scons
 BuildRequires:	swig-python
 Requires(post,postun):	desktop-file-utils
 Requires:	hicolor-icon-theme
-Requires:	libpng
 Requires:	python-numpy-numarray
 Requires:	python-pycairo
 Requires:	python-pygtk-gtk
