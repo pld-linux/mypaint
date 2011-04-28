@@ -11,7 +11,7 @@ BuildRequires:	gettext-devel
 BuildRequires:	libpng-devel
 BuildRequires:	python-numpy-numarray-devel
 BuildRequires:	rpm-pythonprov
-BuildRequires:	rpmbuild(macros) >= 1.32
+BuildRequires:	rpmbuild(find_lang) >= 1.32
 BuildRequires:	scons
 BuildRequires:	swig-python
 Requires(post,postun):	desktop-file-utils
