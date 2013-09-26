@@ -19,6 +19,7 @@ BuildRequires:	python-pygobject-devel
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(find_lang) >= 1.32
 BuildRequires:	scons
+BuildRequires:	sed >= 4.0
 BuildRequires:	swig-python
 Requires:	desktop-file-utils
 Requires:	gtk-update-icon-cache
@@ -42,13 +43,30 @@ ukrywania interfejsu użytkownika.
 %prep
 %setup -q
 
+%{__sed} -i -e "
+	# set our cflags
+	s/'-O3'/'%{rpmcflags}'/
+
+	# lib64 fix
+	s,prefix/lib/mypaint,prefix/%{_lib}/mypaint,
+" SConscript SConstruct
+
+%{__sed} -i -e "
+	/@LIBDIR@/ s/'lib'/'%{_lib}'/
+	s,prefix/lib,prefix/%{_lib},
+" brushlib/SConscript
+
 %build
-%scons
+%scons \
+	prefix=$RPM_BUILD_ROOT%{_prefix}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 %scons install \
 	prefix=$RPM_BUILD_ROOT%{_prefix}
+
+# scons as always sucks and doesn't set +x bit
+chmod +x $RPM_BUILD_ROOT%{_libdir}/mypaint/_mypaintlib.so
 
 # not packaged
 %{__rm} -r $RPM_BUILD_ROOT%{_includedir}/libmypaint
