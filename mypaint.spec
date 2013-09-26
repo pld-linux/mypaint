@@ -1,5 +1,3 @@
-# TODO:
-# * create devel subpackage
 Summary:	MyPaint is a fast and easy open-source graphics application for digital painters
 Summary(pl.UTF-8):	Szybka i łatwa w obsłudze aplikacja dla komputerowych malarzy.
 Name:		mypaint
@@ -51,6 +49,11 @@ ukrywania interfejsu użytkownika.
 rm -rf $RPM_BUILD_ROOT
 %scons install \
 	prefix=$RPM_BUILD_ROOT%{_prefix}
+
+# not packaged
+%{__rm} -r $RPM_BUILD_ROOT%{_includedir}/libmypaint
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/libmypaint.a
+%{__rm} $RPM_BUILD_ROOT%{_pkgconfigdir}/libmypaint.pc
 
 # unsupported
 %{__rm} -r $RPM_BUILD_ROOT%{_localedir}/nn_NO
