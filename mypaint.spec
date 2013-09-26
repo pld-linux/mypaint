@@ -1,26 +1,28 @@
 # TODO:
 # * create devel subpackage
+# * fix lang packaging
 Summary:	MyPaint is a fast and easy open-source graphics application for digital painters
 Summary(pl.UTF-8):	Szybka i łatwa w obsłudze aplikacja dla komputerowych malarzy.
 Name:		mypaint
 Version:	1.1.0
-Release:	1
+Release:	0.1
 License:	GPL
 Group:		X11/Applications/Graphics
 Source0:	http://download.gna.org/mypaint/%{name}-%{version}.tar.bz2
-# Source0-md5:	7846a8406259d0fc81c9a2157a2348bf
 URL:		http://mypaint.intilinux.com/
 BuildRequires:	gettext-devel
+BuildRequires:	gtk+2-devel
 BuildRequires:	json-c-devel
 BuildRequires:	lcms2-devel
 BuildRequires:	libpng-devel
+BuildRequires:	pkgconfig
 BuildRequires:	python-numpy-numarray-devel
+BuildRequires:	python-pygobject-devel
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(find_lang) >= 1.32
 BuildRequires:	scons
 BuildRequires:	swig-python
-Requires:	desktop-file-utils
-Requires:	gtk-update-icon-cache
+Requires(post,postun):	desktop-file-utils
 Requires:	hicolor-icon-theme
 Requires:	python-numpy-numarray
 Requires:	python-pycairo
@@ -46,8 +48,7 @@ ukrywania interfejsu użytkownika.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-%scons install \
-	prefix=$RPM_BUILD_ROOT%{_prefix}
+%scons prefix=$RPM_BUILD_ROOT%{_prefix} install
 
 # unsupported
 %{__rm} -r $RPM_BUILD_ROOT%{_localedir}/nn_NO
@@ -58,11 +59,15 @@ rm -rf $RPM_BUILD_ROOT
 rm -rf $RPM_BUILD_ROOT
 
 %post
-%update_desktop_database
+/sbin/ldconfig
+umask 022
+[ ! -x %{_bindir}/update-desktop-database ] || %{_bindir}/update-desktop-database >/dev/null 2>&1 ||:
 %update_icon_cache hicolor
 
 %postun
-%update_desktop_database
+/sbin/ldconfig
+umask 022
+[ ! -x %{_bindir}/update-desktop-database ] || %{_bindir}/update-desktop-database >/dev/null 2>&1
 %update_icon_cache hicolor
 
 %files -f %{name}.lang
@@ -72,8 +77,18 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/mypaint
 %attr(755,root,root) %{_libdir}/mypaint/*_mypaintlib.so
 %{_desktopdir}/mypaint.desktop
-%{_iconsdir}/hicolor/*/apps/mypaint.*
-%{_iconsdir}/hicolor/*/actions/*.*
+%{_iconsdir}/hicolor/16x16/apps/mypaint.png
+%{_iconsdir}/hicolor/16x16/actions/*.png
+%{_iconsdir}/hicolor/22x22/apps/mypaint.png
+%{_iconsdir}/hicolor/22x22/actions/*.png
+%{_iconsdir}/hicolor/24x24/apps/mypaint.png
+%{_iconsdir}/hicolor/24x24/actions/*.png
+%{_iconsdir}/hicolor/32x32/apps/mypaint.png
+%{_iconsdir}/hicolor/32x32/actions/*.png
+%{_iconsdir}/hicolor/48x48/apps/mypaint.png
+%{_iconsdir}/hicolor/48x48/actions/*.png
+%{_iconsdir}/hicolor/scalable/apps/mypaint.svg
+%{_iconsdir}/hicolor/scalable/actions/*.svg
 %dir %{_datadir}/mypaint
 %{_datadir}/mypaint/backgrounds
 %dir %{_datadir}/mypaint/brushes
@@ -83,6 +98,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/mypaint/brushes/experimental
 %{_datadir}/mypaint/brushes/ramon
 %{_datadir}/mypaint/brushes/tanda
+#%{_datadir}/mypaint/brushes/FX_blender_prev
 %attr(755,root,root) %{_datadir}/mypaint/brushes/label-brush-mypaint.sh
 %{_datadir}/mypaint/brushes/order.conf
 %{_datadir}/mypaint/brushes/prev-template.xcf.gz
@@ -92,6 +108,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/mypaint/brushlib/brushsettings.json
 %attr(755,root,root) %{_datadir}/mypaint/brushlib/generate.py
 %dir %{_datadir}/mypaint/gui
+#%attr(755,root,root) %{_datadir}/mypaint/gui/colorsamplerwindow.py
 %{_datadir}/mypaint/gui/*.xml
 %{_datadir}/mypaint/gui/*.py
 %dir %{_datadir}/mypaint/gui/colors
