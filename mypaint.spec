@@ -2,11 +2,12 @@ Summary:	MyPaint is a fast and easy open-source graphics application for digital
 Summary(pl.UTF-8):	Szybka i łatwa w obsłudze aplikacja dla komputerowych malarzy.
 Name:		mypaint
 Version:	1.1.0
-Release:	3
+Release:	4
 License:	GPL
 Group:		X11/Applications/Graphics
 Source0:	http://download.gna.org/mypaint/%{name}-%{version}.tar.bz2
 # Source0-md5:	7846a8406259d0fc81c9a2157a2348bf
+Patch0:		json-c-0.12.patch
 URL:		http://mypaint.intilinux.com/
 BuildRequires:	gettext-devel
 BuildRequires:	gtk+2-devel
@@ -42,6 +43,7 @@ ukrywania interfejsu użytkownika.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %{__sed} -i -e "
 	# set our cflags
