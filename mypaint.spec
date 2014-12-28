@@ -9,7 +9,7 @@ Source0:	http://download.gna.org/mypaint/%{name}-%{version}.tar.bz2
 # Source0-md5:	7846a8406259d0fc81c9a2157a2348bf
 Patch0:		json-c-0.12.patch
 URL:		http://mypaint.intilinux.com/
-BuildRequires:	gettext-devel
+BuildRequires:	gettext-tools
 BuildRequires:	gtk+2-devel
 BuildRequires:	json-c-devel
 BuildRequires:	lcms2-devel
