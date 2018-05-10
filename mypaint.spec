@@ -2,7 +2,7 @@ Summary:	MyPaint is a fast and easy open-source graphics application for digital
 Summary(pl.UTF-8):	Szybka i łatwa w obsłudze aplikacja dla komputerowych malarzy.
 Name:		mypaint
 Version:	1.1.0
-Release:	4
+Release:	5
 License:	GPL
 Group:		X11/Applications/Graphics
 Source0:	http://download.gna.org/mypaint/%{name}-%{version}.tar.bz2
