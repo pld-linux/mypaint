@@ -2,7 +2,7 @@ Summary:	MyPaint is a fast and easy open-source graphics application for digital
 Summary(pl.UTF-8):	Szybka i łatwa w obsłudze aplikacja dla komputerowych malarzy.
 Name:		mypaint
 Version:	1.2.1
-Release:	1
+Release:	2
 License:	GPL
 Group:		X11/Applications/Graphics
 #Source0Download: https://github.com/mypaint/mypaint/releases
@@ -89,6 +89,7 @@ chmod +x $RPM_BUILD_ROOT%{_libdir}/mypaint/_mypaintlib.so
 
 # unify code
 %{__mv} $RPM_BUILD_ROOT%{_localedir}/{nn_NO,nn}
+%{__rm} -r $RPM_BUILD_ROOT%{_localedir}/sr@cyrillic
 
 %find_lang %{name}
 
@@ -116,6 +117,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/libmypaint/brushsettings.py
 %{_datadir}/libmypaint/brushsettings.json
 %attr(755,root,root) %{_datadir}/libmypaint/generate.py
+%dir %{_datadir}/mypaint
 %{_datadir}/mypaint/backgrounds
 %dir %{_datadir}/mypaint/brushes
 %{_datadir}/mypaint/brushes/FX_blender_prev.png
