@@ -89,7 +89,7 @@ chmod +x $RPM_BUILD_ROOT%{_libdir}/mypaint/_mypaintlib.so
 
 # unify code
 %{__mv} $RPM_BUILD_ROOT%{_localedir}/{nn_NO,nn}
-%{__rm} -r $RPM_BUILD_ROOT%{_localedir}/sr@cyrillic
+%{__mv} $RPM_BUILD_ROOT%{_localedir}/{sr@cyrillic,sr}
 
 %find_lang %{name}
 
