@@ -1,37 +1,42 @@
 Summary:	MyPaint is a fast and easy open-source graphics application for digital painters
-Summary(pl.UTF-8):	Szybka i łatwa w obsłudze aplikacja dla komputerowych malarzy.
+Summary(pl.UTF-8):	Szybka i łatwa w obsłudze aplikacja dla komputerowych malarzy
 Name:		mypaint
-Version:	1.2.1
-Release:	2
-License:	GPL
+Version:	2.0.0
+Release:	1
+License:	GPL v2+
 Group:		X11/Applications/Graphics
 #Source0Download: https://github.com/mypaint/mypaint/releases
 Source0:	https://github.com/mypaint/mypaint/releases/download/v%{version}/%{name}-%{version}.tar.xz
-# Source0-md5:	ac08c3135929f5641488fbbb9746fe41
-Patch0:		%{name}-no-env.patch
+# Source0-md5:	96a8159330e90dcd5d9c0b455128c3ec
 URL:		http://mypaint.org/
 BuildRequires:	gettext-tools
-BuildRequires:	gtk+3-devel >= 3.10
+BuildRequires:	glib2-devel >= 2.0
+BuildRequires:	gtk+3-devel >= 3.12
 BuildRequires:	json-c-devel >= 0.11
 BuildRequires:	lcms2-devel >= 2
 BuildRequires:	libgomp-devel
+BuildRequires:	libmypaint-devel >= 1.5
 BuildRequires:	libpng-devel
-BuildRequires:	libstdc++-devel
+BuildRequires:	libstdc++-devel >= 6:4.7
+BuildRequires:	mypaint-brushes-devel >= 2.0
 BuildRequires:	pkgconfig
-BuildRequires:	python >= 1:2.7
-BuildRequires:	python-numpy-numarray-devel
+BuildRequires:	python >= 1:2.7.4
+BuildRequires:	python-numpy-devel
 BuildRequires:	python-pygobject3-devel >= 3.0
+BuildRequires:	python-setuptools
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(find_lang) >= 1.32
-BuildRequires:	scons >= 2.1.0
 BuildRequires:	sed >= 4.0
-BuildRequires:	swig-python
+BuildRequires:	swig-python >= 3
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
 Requires:	desktop-file-utils
+Requires:	gtk+3-devel >= 3.12
 Requires:	gtk-update-icon-cache
 Requires:	hicolor-icon-theme
-Requires:	python-numpy-numarray
+Requires:	libmypaint >= 1.5
+Requires:	mypaint-brushes >= 2.0
+Requires:	python-numpy
 Requires:	python-pycairo >= 1.4
 Requires:	python-pygobject3 >= 3
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -49,47 +54,26 @@ ukrywania interfejsu użytkownika.
 
 %prep
 %setup -q
-%patch0 -p1
 
-%{__sed} -i -e "
-	# set our cflags
-	s/'-O3'/'%{rpmcflags}'/
-
-	# lib64 fix
-	s,prefix/lib/mypaint,prefix/%{_lib}/mypaint,
-" SConscript SConstruct
-
-%{__sed} -i -e "
-	/@LIBDIR@/ s/'lib'/'%{_lib}'/
-	s,prefix/lib,prefix/%{_lib},
-" brushlib/SConscript
+%{__sed} -i -e 's/^\(linkflags\|ccflags\).*-O3.*/pass/' setup.py
 
 %build
-%scons \
-	prefix=$RPM_BUILD_ROOT%{_prefix}
+%py_build
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%scons install \
-	prefix=$RPM_BUILD_ROOT%{_prefix} \
-	python_binary=%{__python}
+# see mypaint script /libpath_combined
+%py_install \
+	--install-platlib=%{_prefix}/lib/mypaint \
+	--install-purelib=%{_prefix}/lib/mypaint
 
-# scons as always sucks and doesn't set +x bit
-chmod +x $RPM_BUILD_ROOT%{_libdir}/mypaint/_mypaintlib.so
-
-# see libmypaint.spec
-%{__rm} -r $RPM_BUILD_ROOT%{_includedir}/libmypaint
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/libmypaint.a
-%{__rm} $RPM_BUILD_ROOT%{_pkgconfigdir}/libmypaint.pc
-%{__rm} $RPM_BUILD_ROOT%{_localedir}/*/LC_MESSAGES/libmypaint.mo
+%py_postclean %{_prefix}/lib/mypaint
 
 # duplicate of scalable?
 %{__rm} $RPM_BUILD_ROOT%{_iconsdir}/hicolor/24x24/actions/*.svg
 
-# unify code
 %{__mv} $RPM_BUILD_ROOT%{_localedir}/{nn_NO,nn}
-%{__mv} $RPM_BUILD_ROOT%{_localedir}/{sr@cyrillic,sr}
 
 %find_lang %{name}
 
@@ -109,33 +93,18 @@ rm -rf $RPM_BUILD_ROOT
 %doc Changelog.md Licenses.dep5 Licenses.md README.md doc/*
 %attr(755,root,root) %{_bindir}/mypaint
 %attr(755,root,root) %{_bindir}/mypaint-ora-thumbnailer
-%dir %{_libdir}/mypaint
-%attr(755,root,root) %{_libdir}/mypaint/_mypaintlib.so
-%{_datadir}/appdata/mypaint.appdata.xml
-%dir %{_datadir}/libmypaint
-%{_datadir}/libmypaint/__init__.py
-%{_datadir}/libmypaint/brushsettings.py
-%{_datadir}/libmypaint/brushsettings.json
-%attr(755,root,root) %{_datadir}/libmypaint/generate.py
-%dir %{_datadir}/mypaint
-%{_datadir}/mypaint/backgrounds
-%dir %{_datadir}/mypaint/brushes
-%{_datadir}/mypaint/brushes/FX_blender_prev.png
-%{_datadir}/mypaint/brushes/classic
-%{_datadir}/mypaint/brushes/deevad
-%{_datadir}/mypaint/brushes/experimental
-%{_datadir}/mypaint/brushes/kaerhon_v1
-%{_datadir}/mypaint/brushes/ramon
-%{_datadir}/mypaint/brushes/tanda
-%attr(755,root,root) %{_datadir}/mypaint/brushes/label-brush-mypaint.sh
-%{_datadir}/mypaint/brushes/order.conf
-%{_datadir}/mypaint/brushes/prev-template.xcf.gz
-%{_datadir}/mypaint/gui
-%{_datadir}/mypaint/palettes
-%{_datadir}/mypaint/lib
-%{_datadir}/mypaint/pixmaps
+%dir %{_prefix}/lib/mypaint
+%{_prefix}/lib/mypaint/gui
+%dir %{_prefix}/lib/mypaint/lib
+%attr(755,root,root) %{_prefix}/lib/mypaint/lib/_mypaintlib.so
+%{_prefix}/lib/mypaint/lib/*.py[co]
+%{_prefix}/lib/mypaint/lib/layer
+%{_prefix}/lib/mypaint/MyPaint-%{version}*.egg-info
+%{_datadir}/metainfo/mypaint.appdata.xml
+%{_datadir}/mypaint
 %{_datadir}/thumbnailers/mypaint-ora.thumbnailer
 %{_desktopdir}/mypaint.desktop
-%{_iconsdir}/hicolor/*x*/apps/mypaint.png
 %{_iconsdir}/hicolor/*x*/actions/mypaint-tool-*.png
 %{_iconsdir}/hicolor/scalable/actions/mypaint-*.svg
+%{_iconsdir}/hicolor/scalable/apps/org.mypaint.MyPaint.svg
+%{_iconsdir}/hicolor/symbolic/apps/org.mypaint.MyPaint-symbolic.svg
