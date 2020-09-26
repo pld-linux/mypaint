@@ -1,13 +1,13 @@
 Summary:	MyPaint is a fast and easy open-source graphics application for digital painters
 Summary(pl.UTF-8):	Szybka i łatwa w obsłudze aplikacja dla komputerowych malarzy
 Name:		mypaint
-Version:	2.0.0
-Release:	2
+Version:	2.0.1
+Release:	1
 License:	GPL v2+
 Group:		X11/Applications/Graphics
 #Source0Download: https://github.com/mypaint/mypaint/releases
 Source0:	https://github.com/mypaint/mypaint/releases/download/v%{version}/%{name}-%{version}.tar.xz
-# Source0-md5:	96a8159330e90dcd5d9c0b455128c3ec
+# Source0-md5:	dc9abd2e9da8477cbad55905ed07a46a
 URL:		http://mypaint.org/
 BuildRequires:	gettext-tools
 BuildRequires:	glib2-devel >= 2.0
@@ -15,7 +15,7 @@ BuildRequires:	gtk+3-devel >= 3.12
 BuildRequires:	json-c-devel >= 0.11
 BuildRequires:	lcms2-devel >= 2
 BuildRequires:	libgomp-devel
-BuildRequires:	libmypaint-devel >= 1.5
+BuildRequires:	libmypaint-devel >= 1.6
 BuildRequires:	libpng-devel
 BuildRequires:	libstdc++-devel >= 6:4.7
 BuildRequires:	mypaint-brushes-devel >= 2.0
@@ -34,7 +34,7 @@ Requires:	desktop-file-utils
 Requires:	gtk+3-devel >= 3.12
 Requires:	gtk-update-icon-cache
 Requires:	hicolor-icon-theme
-Requires:	libmypaint >= 1.5
+Requires:	libmypaint >= 1.6
 Requires:	mypaint-brushes >= 2.0
 Requires:	python-numpy
 Requires:	python-pycairo >= 1.4
@@ -99,7 +99,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_prefix}/lib/mypaint/lib/_mypaintlib.so
 %{_prefix}/lib/mypaint/lib/*.py[co]
 %{_prefix}/lib/mypaint/lib/layer
-%{_prefix}/lib/mypaint/MyPaint-%{version}*.egg-info
+%{_prefix}/lib/mypaint/MyPaint-2.0.0a0-py*.egg-info
 %{_datadir}/metainfo/mypaint.appdata.xml
 %{_datadir}/mypaint
 %{_datadir}/thumbnailers/mypaint-ora.thumbnailer
