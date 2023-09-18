@@ -2,7 +2,7 @@ Summary:	MyPaint is a fast and easy open-source graphics application for digital
 Summary(pl.UTF-8):	Szybka i łatwa w obsłudze aplikacja dla komputerowych malarzy
 Name:		mypaint
 Version:	2.0.1
-Release:	1
+Release:	2
 License:	GPL v2+
 Group:		X11/Applications/Graphics
 #Source0Download: https://github.com/mypaint/mypaint/releases
@@ -20,10 +20,10 @@ BuildRequires:	libpng-devel
 BuildRequires:	libstdc++-devel >= 6:4.7
 BuildRequires:	mypaint-brushes-devel >= 2.0
 BuildRequires:	pkgconfig
-BuildRequires:	python >= 1:2.7.4
-BuildRequires:	python-numpy-devel
-BuildRequires:	python-pygobject3-devel >= 3.0
-BuildRequires:	python-setuptools
+BuildRequires:	python3 >= 1:3.7
+BuildRequires:	python3-numpy-devel
+BuildRequires:	python3-pygobject3-devel >= 3.0
+BuildRequires:	python3-setuptools
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(find_lang) >= 1.32
 BuildRequires:	sed >= 4.0
@@ -36,9 +36,9 @@ Requires:	gtk-update-icon-cache
 Requires:	hicolor-icon-theme
 Requires:	libmypaint >= 1.6
 Requires:	mypaint-brushes >= 2.0
-Requires:	python-numpy
-Requires:	python-pycairo >= 1.4
-Requires:	python-pygobject3 >= 3
+Requires:	python3-numpy
+Requires:	python3-pycairo >= 1.4
+Requires:	python3-pygobject3 >= 3
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -58,17 +58,15 @@ ukrywania interfejsu użytkownika.
 %{__sed} -i -e 's/^\(linkflags\|ccflags\).*-O3.*/pass/' setup.py
 
 %build
-%py_build
+%py3_build
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
 # see mypaint script /libpath_combined
-%py_install \
-	--install-platlib=%{_prefix}/lib/mypaint \
-	--install-purelib=%{_prefix}/lib/mypaint
-
-%py_postclean %{_prefix}/lib/mypaint
+%py3_install \
+	--install-platlib=%{_libdir}/mypaint \
+	--install-purelib=%{_libdir}/lib/mypaint
 
 # duplicate of scalable?
 %{__rm} $RPM_BUILD_ROOT%{_iconsdir}/hicolor/24x24/actions/*.svg
@@ -93,13 +91,14 @@ rm -rf $RPM_BUILD_ROOT
 %doc Changelog.md Licenses.dep5 Licenses.md README.md doc/*
 %attr(755,root,root) %{_bindir}/mypaint
 %attr(755,root,root) %{_bindir}/mypaint-ora-thumbnailer
-%dir %{_prefix}/lib/mypaint
-%{_prefix}/lib/mypaint/gui
-%dir %{_prefix}/lib/mypaint/lib
-%attr(755,root,root) %{_prefix}/lib/mypaint/lib/_mypaintlib.so
-%{_prefix}/lib/mypaint/lib/*.py[co]
-%{_prefix}/lib/mypaint/lib/layer
-%{_prefix}/lib/mypaint/MyPaint-2.0.0a0-py*.egg-info
+%dir %{_libdir}/mypaint
+%{_libdir}/mypaint/gui
+%dir %{_libdir}/mypaint/lib
+%attr(755,root,root) %{_libdir}/mypaint/lib/_mypaintlib*.so
+%{_libdir}/mypaint/lib/__pycache__
+%{_libdir}/mypaint/lib/*.py
+%{_libdir}/mypaint/lib/layer
+%{_libdir}/mypaint/MyPaint-2.0.0a0-py*.egg-info
 %{_datadir}/metainfo/mypaint.appdata.xml
 %{_datadir}/mypaint
 %{_datadir}/thumbnailers/mypaint-ora.thumbnailer
