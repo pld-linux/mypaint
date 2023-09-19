@@ -2,7 +2,7 @@ Summary:	MyPaint is a fast and easy open-source graphics application for digital
 Summary(pl.UTF-8):	Szybka i łatwa w obsłudze aplikacja dla komputerowych malarzy
 Name:		mypaint
 Version:	2.0.1
-Release:	3
+Release:	4
 License:	GPL v2+
 Group:		X11/Applications/Graphics
 #Source0Download: https://github.com/mypaint/mypaint/releases
@@ -64,9 +64,10 @@ ukrywania interfejsu użytkownika.
 rm -rf $RPM_BUILD_ROOT
 
 # see mypaint script /libpath_combined
+# mypaint imports modules by lib.foo, so it cannot be _libdir
 %py3_install \
-	--install-platlib=%{_libdir}/mypaint \
-	--install-purelib=%{_libdir}/lib/mypaint
+	--install-platlib=%{_prefix}/lib/mypaint \
+	--install-purelib=%{_prefix}/lib/lib/mypaint
 
 # duplicate of scalable?
 %{__rm} $RPM_BUILD_ROOT%{_iconsdir}/hicolor/24x24/actions/*.svg
@@ -91,14 +92,14 @@ rm -rf $RPM_BUILD_ROOT
 %doc Changelog.md Licenses.dep5 Licenses.md README.md doc/*
 %attr(755,root,root) %{_bindir}/mypaint
 %attr(755,root,root) %{_bindir}/mypaint-ora-thumbnailer
-%dir %{_libdir}/mypaint
-%{_libdir}/mypaint/gui
-%dir %{_libdir}/mypaint/lib
-%attr(755,root,root) %{_libdir}/mypaint/lib/_mypaintlib*.so
-%{_libdir}/mypaint/lib/__pycache__
-%{_libdir}/mypaint/lib/*.py
-%{_libdir}/mypaint/lib/layer
-%{_libdir}/mypaint/MyPaint-2.0.0a0-py*.egg-info
+%dir %{_prefix}/lib/mypaint
+%{_prefix}/lib/mypaint/gui
+%dir %{_prefix}/lib/mypaint/lib
+%attr(755,root,root) %{_prefix}/lib/mypaint/lib/_mypaintlib*.so
+%{_prefix}/lib/mypaint/lib/__pycache__
+%{_prefix}/lib/mypaint/lib/*.py
+%{_prefix}/lib/mypaint/lib/layer
+%{_prefix}/lib/mypaint/MyPaint-2.0.0a0-py*.egg-info
 %{_datadir}/metainfo/mypaint.appdata.xml
 %{_datadir}/mypaint
 %{_datadir}/thumbnailers/mypaint-ora.thumbnailer
