@@ -2,7 +2,7 @@ Summary:	MyPaint is a fast and easy open-source graphics application for digital
 Summary(pl.UTF-8):	Szybka i łatwa w obsłudze aplikacja dla komputerowych malarzy
 Name:		mypaint
 Version:	2.0.1
-Release:	4
+Release:	5
 License:	GPL v2+
 Group:		X11/Applications/Graphics
 #Source0Download: https://github.com/mypaint/mypaint/releases
@@ -36,6 +36,7 @@ Requires:	gtk-update-icon-cache
 Requires:	hicolor-icon-theme
 Requires:	libmypaint >= 1.6
 Requires:	mypaint-brushes >= 2.0
+Requires:	pydoc3
 Requires:	python3-numpy
 Requires:	python3-pycairo >= 1.4
 Requires:	python3-pygobject3 >= 3
